@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMA Report - 1030 Bradley Way, East Palo Alto</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #1A1A1A;
+            --gold: #C5A55A;
+            --white: #FFFFFF;
+            --light-gold: #F5EFDC;
+            --dark-gold: #A88B3D;
+            --gray-light: #F9F7F2;
+            --gray-medium: #E8E4DC;
+            --gray-dark: #5A5A5A;
+            --accent-blue: #4A90E2;
+            --accent-green: #6ECB63;
+            --accent-orange: #FF9500;
+            --accent-red: #E74C3C;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--black);
+            background-color: var(--white);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Website Nav (mirrors graehamwatts.com) */
+        .site-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #343955;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1001;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .site-nav .site-logo img {
+            height: 55px;
+            width: auto;
+        }
+
+        .site-nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .site-nav a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .site-nav a:hover {
+            color: var(--gold);
+        }
+
+        /* CMA Section Nav */
+        nav.cma-nav {
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: var(--black);
+            padding: 0.6rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            border-top: 1px solid var(--gold);
+        }
+
+        nav.cma-nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav.cma-nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.3s;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+        }
+
+        nav.cma-nav a:hover {
+            color: var(--gold);
+        }
+
+        nav.cma-nav a.active {
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 0.3rem;
+        }
+
+        section {
+            scroll-margin-top: 110px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--black) 0%, #2A2A2A 100%);
+            color: var(--white);
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            margin-top: 110px;
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-agent {
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .hero-agent span {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+            color: var(--gold);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--light-gold);
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .hero-address {
+            font-size: 1.8rem;
+            margin: 1.5rem 0;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .hero-date {
+            font-size: 0.95rem;
+            color: var(--gray-medium);
+            margin-top: 2rem;
+        }
+
+        /* Content Sections */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header .divider {
+            width: 80px;
+            height: 3px;
+            background: var(--gold);
+            margin: 1rem auto;
+        }
+
+        .section-header p {
+            font-size: 1.05rem;
+            color: var(--gray-dark);
+            max-width: 600px;
+            margin: 1rem auto 0;
+        }
+
+        /* Subject Property Summary */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .subject-details {
+            background: var(--light-gold);
+            padding: 2rem;
+            border-left: 4px solid var(--gold);
+            border-radius: 4px;
+        }
+
+        .subject-details h3 {
+            color: var(--black);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .detail-value {
+            color: var(--dark-gold);
+            font-weight: 600;
+        }
+
+        .stat-boxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: var(--black);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 4px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--light-gold);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .subject-overview {
+            background: var(--gray-light);
+            padding: 2rem;
+            border-radius: 4px;
+            line-height: 1.8;
+            color: var(--gray-dark);
+        }
+
+        /* Market Story Section */
+        .market-story {
+            background: var(--light-gold);
+            padding: 3rem;
+            border-radius: 4px;
+            line-height: 1.9;
+            color: var(--black);
+        }
+
+        .market-story p {
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .market-story strong {
+            color: var(--dark-gold);
+            font-weight: 700;
+        }
+
+        /* Comparable Sales Table */
+        .comps-section {
+            margin-top: 3rem;
+        }
+
+        .comp-group {
+            margin-bottom: 3rem;
+        }
+
+        .comp-group-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--black);
+            background: var(--gray-medium);
+            padding: 1rem 1.5rem;
+            border-left: 4px solid var(--gold);
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        thead {
+            background: var(--black);
+            color: var(--gold);
+        }
+
+        th {
+            padding: 1rem 0.75rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 0.9rem 0.75rem;
+            border-bottom: 1px solid var(--gray-medium);
+            font-size: 0.95rem;
+        }
+
+        tbody tr:hover {
+            background-color: var(--light-gold);
+        }
+
+        tbody tr.subject-row {
+            background-color: var(--light-gold);
+            font-weight: 600;
+        }
+
+        .comp-address {
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .comp-mls {
+            font-size: 0.85rem;
+            color: var(--gray-dark);
+        }
+
+        .price-highlight {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .dom-highlight {
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        /* Charts */
+        .charts-container {
+            margin: 3rem 0;
+        }
+
+        .chart-wrapper {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 4px;
+            margin-bottom: 3rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* Price per Sqft Chart */
+        #pricePerSqftChart {
+            max-height: 300px;
+            margin-bottom: 1rem;
+        }
+
+        /* Market Data Section */
+        .market-data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .data-card {
+            background: var(--black);
+            color: var(--white);
+            padding: 1.8rem;
+            border-radius: 4px;
+            text-align: center;
+            border-top: 3px solid var(--gold);
+        }
+
+        .data-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .data-label {
+            font-size: 0.9rem;
+            color: var(--light-gold);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* DOM Chart */
+        #domChart {
+            max-height: 250px;
+            margin-bottom: 1rem;
+        }
+
+        /* List-to-Sale Ratio */
+        .lts-container {
+            margin: 2rem 0;
+        }
+
+        .lts-item {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--gray-light);
+            border-radius: 4px;
+        }
+
+        .lts-label {
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .lts-bar-container {
+            display: flex;
+            align-items: center;
+            height: 30px;
+            background: white;
+            border: 1px solid var(--gray-medium);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .lts-center-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gold);
+            z-index: 1;
+        }
+
+        .lts-bar-under {
+            background: linear-gradient(90deg, var(--accent-red), var(--gold));
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .lts-bar-over {
+            background: linear-gradient(90deg, var(--gold), var(--accent-green));
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 0.5rem;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .lts-center {
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Pricing Strategy Section */
+        .strategy-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .strategy-card {
+            background: var(--white);
+            border: 2px solid var(--gray-medium);
+            border-radius: 4px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .strategy-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 4px 12px rgba(197, 165, 90, 0.2);
+        }
+
+        .strategy-card h3 {
+            font-size: 1.3rem;
+            color: var(--black);
+            margin-bottom: 1rem;
+        }
+
+        .strategy-price {
+            font-size: 1.8rem;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .strategy-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--gray-light);
+            font-size: 0.95rem;
+        }
+
+        .strategy-row:last-child {
+            border-bottom: none;
+        }
+
+        .strategy-label {
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .strategy-value {
+            color: var(--gray-dark);
+        }
+
+        .strategy-pros {
+            background: #E8F5E9;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-left: 3px solid var(--accent-green);
+        }
+
+        .strategy-pros strong {
+            color: var(--accent-green);
+        }
+
+        .strategy-risks {
+            background: #FFEBEE;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            border-left: 3px solid var(--accent-red);
+        }
+
+        .strategy-risks strong {
+            color: var(--accent-red);
+        }
+
+        /* Positioning Chart */
+        #positioningChart {
+            max-height: 350px;
+            margin: 2rem 0;
+        }
+
+        /* Price Range Boxes */
+        .price-ranges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .price-range {
+            background: var(--black);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 4px;
+            text-align: center;
+            border-top: 4px solid var(--gold);
+        }
+
+        .price-range h3 {
+            color: var(--light-gold);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .price-range-value {
+            font-size: 2rem;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-range-detail {
+            font-size: 0.9rem;
+            color: var(--light-gold);
+            line-height: 1.6;
+        }
+
+        .recommendation {
+            background: var(--light-gold);
+            padding: 2rem;
+            border-left: 4px solid var(--dark-gold);
+            border-radius: 4px;
+            margin: 2rem 0;
+            line-height: 1.8;
+        }
+
+        .recommendation h3 {
+            color: var(--black);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .recommendation strong {
+            color: var(--dark-gold);
+            font-weight: 700;
+        }
+
+        /* Special Considerations */
+        .consideration-boxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .consideration-box {
+            background: var(--white);
+            border: 2px solid var(--gold);
+            border-radius: 4px;
+            padding: 1.5rem;
+        }
+
+        .consideration-box h4 {
+            color: var(--dark-gold);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .consideration-box p {
+            font-size: 0.95rem;
+            color: var(--gray-dark);
+            line-height: 1.6;
+        }
+
+        .flag-icon {
+            color: var(--accent-red);
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--black);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 4px solid var(--gold);
+        }
+
+        .contact-section h2 {
+            color: var(--gold);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--gold);
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            color: var(--light-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-value {
+            font-size: 1.1rem;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .contact-value a {
+            color: var(--gold);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-value a:hover {
+            color: var(--light-gold);
+        }
+
+        .brokerage-info {
+            font-size: 0.9rem;
+            color: var(--light-gold);
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+
+            .hero {
+                padding: 4rem 1.5rem 2.5rem;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .subject-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-boxes {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            nav a {
+                font-size: 0.8rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.6rem 0.4rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Print Styles */
+        @media (max-width: 768px) {
+            .site-nav ul {
+                display: none;
+            }
+            .site-nav {
+                justify-content: center;
+            }
+            nav.cma-nav ul {
+                gap: 0.8rem;
+            }
+            nav.cma-nav a {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media print {
+            .site-nav, nav.cma-nav {
+                display: none;
+            }
+
+            section {
+                page-break-inside: avoid;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Animation for counters */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Website Navigation (mirrors graehamwatts.com) -->
+    <div class="site-nav">
+        <a href="https://graehamwatts.com/" class="site-logo" target="_blank">
+            <img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/6wuU3haUH7uNeT20E3UZ/media/691256870b647e40e3c2e105.png" alt="Graeham Watts Logo">
+        </a>
+        <ul>
+            <li><a href="https://graehamwatts.com/" target="_blank">Home</a></li>
+            <li><a href="https://graehamwatts.com/buy-with-graeham" target="_blank">Buy</a></li>
+            <li><a href="https://graehamwatts.com/sell-with-graeham" target="_blank">Sell</a></li>
+            <li><a href="https://graehamwatts.com/buying-in-the-bay" target="_blank">Buying in the Bay</a></li>
+            <li><a href="https://graehamwatts.com/the-bay-real-estate-market" target="_blank">The Bay Market</a></li>
+            <li><a href="https://graehamwatts.com/bay-area-homes-for-sale" target="_blank">Neighborhoods</a></li>
+            <li><a href="https://graehamwatts.com/blog" target="_blank">Blogs</a></li>
+            <li><a href="https://graehamwatts.com/about" target="_blank">About</a></li>
+            <li><a href="https://graehamwatts.com/reviews" target="_blank">Reviews</a></li>
+            <li><a href="https://graehamwatts.com/contact-us" target="_blank">Contact</a></li>
+        </ul>
+    </div>
+
+    <!-- CMA Section Navigation -->
+    <nav class="cma-nav">
+        <ul>
+            <li><a href="#hero" class="nav-link active">CMA Report</a></li>
+            <li><a href="#subject" class="nav-link">Subject</a></li>
+            <li><a href="#market" class="nav-link">Market</a></li>
+            <li><a href="#comps" class="nav-link">Comparables</a></li>
+            <li><a href="#strategy" class="nav-link">Strategy</a></li>
+            <li><a href="#recommendation" class="nav-link">Recommendation</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-top">
+            <div class="hero-agent"><span>GRAEHAM WATTS</span></div>
+            <div class="hero-agent">R E A L T O R</div>
+        </div>
+        <div class="hero-title">COMPARATIVE<br>MARKET ANALYSIS</div>
+        <div class="hero-subtitle">LISTING PRESENTATION</div>
+        <div class="hero-address">1030 Bradley Way<br>East Palo Alto, CA 94303</div>
+        <div class="hero-date">March 30, 2026</div>
+    </section>
+
+    <!-- Subject Property Summary -->
+    <section id="subject" class="container">
+        <div class="section-header">
+            <h2>Subject Property</h2>
+            <div class="divider"></div>
+        </div>
+
+        <div class="subject-grid">
+            <div class="subject-details">
+                <h3>Property Snapshot</h3>
+                <div class="detail-row">
+                    <span class="detail-label">Address</span>
+                    <span class="detail-value">1030 Bradley Way</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">City / ZIP</span>
+                    <span class="detail-value">East Palo Alto, 94303</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Bedrooms</span>
+                    <span class="detail-value">2</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Bathrooms</span>
+                    <span class="detail-value">1</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Square Footage</span>
+                    <span class="detail-value">810 sqft</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Lot Size</span>
+                    <span class="detail-value">6,499 sqft (0.15 ac)</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Year Built</span>
+                    <span class="detail-value">1947</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Property Type</span>
+                    <span class="detail-value">Single Family</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Condition</span>
+                    <span class="detail-value">Good</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="stat-boxes">
+                    <div class="stat-box animate-in">
+                        <div class="stat-value">810</div>
+                        <div class="stat-label">Square Feet</div>
+                    </div>
+                    <div class="stat-box animate-in" style="animation-delay: 0.1s;">
+                        <div class="stat-value">2/1</div>
+                        <div class="stat-label">Bedrooms / Bath</div>
+                    </div>
+                    <div class="stat-box animate-in" style="animation-delay: 0.2s;">
+                        <div class="stat-value">6,499</div>
+                        <div class="stat-label">Lot Sqft</div>
+                    </div>
+                    <div class="stat-box animate-in" style="animation-delay: 0.3s;">
+                        <div class="stat-value">1947</div>
+                        <div class="stat-label">Year Built</div>
+                    </div>
+                </div>
+
+                <div class="subject-overview">
+                    <strong>Property Overview</strong><br><br>
+                    This East Palo Alto single-family residence presents an excellent opportunity for a buyer-occupant or investor seeking entry into the EPA market. Currently in good condition with tenants transitioning out, the home is poised for minor cosmetic updates that will significantly enhance its market appeal. The generous 6,499 sqft lot—larger than most comparable properties in the area—offers long-term flexibility, including potential ADU development. Built in 1947 with a straightforward 2-bed/1-bath layout, this home aligns perfectly with EPA's active buyer demographic: first-time homebuyers, small families, and investors seeking value-add opportunities. No unpermitted work. Ready for presentation with strategic pricing.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Story -->
+    <section id="market" class="container">
+        <div class="section-header">
+            <h2>The Market Story</h2>
+            <div class="divider"></div>
+            <p>Understanding the EPA Single-Family Market in 2026</p>
+        </div>
+
+        <div class="market-story">
+            <p>East Palo Alto's single-family market is experiencing robust activity. Over the past 90 days, 18 homes have sold with a median days-on-market of just 16 days and a median sale price of $1.08M. This tells us the market is competitive, buyers are active, and well-positioned properties move quickly. For a property like 1030 Bradley Way, this velocity matters—positioning and pricing directly determine whether you compete for multiple offers or sit on the sideline.</p>
+
+            <p>The strongest signal in the data is the <strong>1024 Laurel Ave comparable</strong>. This home is nearly identical to the subject: 810 sqft, 2 bed / 1 bath, similar lot size (6,464 sqft), built 1946. It sold on January 2, 2026, for <strong>$805,950</strong> ($995/sqft). All evidence suggests this was an as-is sale to an investor. Now, just three months later, that same property is being re-listed at <strong>$880,000</strong>. The investor recognized value in the bones and location; after minor updates, they are asking $880K. This floor-to-ceiling data tells us: as-is condition in this market is worth ~$806K. With updates and proper presentation, a home of identical specs should command $880K or better.</p>
+
+            <p><strong>Graeham's own recent sales reinforce this story.</strong> The Oakwood Drive property (2 bed / 1 bath, 990 sqft, built 1959) sold March 2 for $1,035,000—$1,045/sqft. That's $229,000 more than the Laurel as-is sale, despite only 180 additional square feet. The difference was presentation, staging, and strategic pricing that generated competition. The Menalto Ave comp ($900K on Feb 12, 1,010 sqft) and the Graeham-listed Clarke Ave property ($1,130K on Mar 23, 1,280 sqft) further confirm that when EPA homes are well-presented and priced to create urgency, they consistently sell at or above asking—often significantly above.</p>
+
+            <p>Critically, <strong>homes priced strategically below market are generating the strongest overbids</strong>. The Illinois St comparable listed at $899,000 and sold for $955,000—a 6.2% premium. That property was 1,030 sqft with 3 bedrooms, which should command less premium than a tightly positioned 2-bed on a larger lot. The pattern is clear: aggressive pricing below the natural market level triggers competition and multiple offers, resulting in final prices above what a higher list price would achieve. This is the Graeham Watts strategy in action.</p>
+
+            <p>For 1030 Bradley Way, the lot size is a differentiator. At 6,499 sqft, it is larger than most EPA comparables and offers future flexibility—ADU development, additional parking, or simply the appeal of more outdoor space. Buyers in this market are increasingly thinking long-term; the lot is worth more per square foot than the home itself. Combined with the transit access to Meta and Google campuses just minutes away, this property will appeal to a diverse buyer pool willing to invest in location and future-proofing.</p>
+
+            <p><strong>The path forward is clear:</strong> List strategically in the $880,000–$940,000 range to capture the broadest buyer pool, position the minor updates as completed or imminent, highlight the lot potential, and expect the market to respond with competition. Based on recent comparable sales and buyer behavior in EPA, a well-presented 1030 Bradley Way should generate offers pushing the final sale price into the <strong>$900,000–$950,000</strong> range—consistent with comparable sales data and current market conditions.</p>
+        </div>
+    </section>
+
+    <!-- Comparable Sales Data -->
+    <section id="comps" class="container">
+        <div class="section-header">
+            <h2>Comparable Sales Analysis</h2>
+            <div class="divider"></div>
+            <p>Seven Recent Sales Across East Palo Alto (Jan – Mar 2026)</p>
+        </div>
+
+        <div class="comps-section">
+            <!-- Most Similar Comps -->
+            <div class="comp-group">
+                <div class="comp-group-title">Most Similar (Direct Comparables)</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Sale Date</th>
+                            <th>Beds/Baths</th>
+                            <th>SQFT</th>
+                            <th>Lot</th>
+                            <th>Year</th>
+                            <th>Sale Price</th>
+                            <th>$/Sqft</th>
+                            <th>DOM</th>
+                            <th>MLS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="comp-address">1024 Laurel Ave<span class="comp-mls">East Palo Alto</span></td>
+                            <td>Jan 2, 2026</td>
+                            <td>2/1</td>
+                            <td>810</td>
+                            <td>6,464</td>
+                            <td>1946</td>
+                            <td class="price-highlight">$805,950</td>
+                            <td>$995</td>
+                            <td class="dom-highlight">~45</td>
+                            <td>SF425082219</td>
+                        </tr>
+                        <tr>
+                            <td class="comp-address">2352 Menalto Ave<span class="comp-mls">East Palo Alto</span></td>
+                            <td>Feb 12, 2026</td>
+                            <td>2/1</td>
+                            <td>1,010</td>
+                            <td>6,480</td>
+                            <td>1936</td>
+                            <td class="price-highlight">$900,000</td>
+                            <td>$891</td>
+                            <td class="dom-highlight">~20</td>
+                            <td>ML82030345</td>
+                        </tr>
+                        <tr>
+                            <td class="comp-address">2055 Oakwood Dr<span class="comp-mls">East Palo Alto</span></td>
+                            <td>Mar 2, 2026</td>
+                            <td>2/1</td>
+                            <td>990</td>
+                            <td>6,211</td>
+                            <td>1959</td>
+                            <td class="price-highlight">$1,035,000</td>
+                            <td>$1,045</td>
+                            <td class="dom-highlight">~15</td>
+                            <td>ML82031748</td>
+                        </tr>
+                        <tr class="subject-row">
+                            <td class="comp-address"><strong>1030 Bradley Way</strong><span class="comp-mls"><strong>SUBJECT</strong></span></td>
+                            <td>–</td>
+                            <td>2/1</td>
+                            <td>810</td>
+                            <td>6,499</td>
+                            <td>1947</td>
+                            <td><strong>–</strong></td>
+                            <td>–</td>
+                            <td>–</td>
+                            <td>–</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Secondary Comps -->
+            <div class="comp-group">
+                <div class="comp-group-title">Secondary Comparables (3+ Bedrooms, Similar Size)</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Sale Date</th>
+                            <th>Beds/Baths</th>
+                            <th>SQFT</th>
+                            <th>Lot</th>
+                            <th>Year</th>
+                            <th>Sale Price</th>
+                            <th>$/Sqft</th>
+                            <th>DOM</th>
+                            <th>MLS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="comp-address">2754 Georgetown St<span class="comp-mls">East Palo Alto</span></td>
+                            <td>Jan 8, 2026</td>
+                            <td>3/1</td>
+                            <td>1,010</td>
+                            <td>5,000</td>
+                            <td>1953</td>
+                            <td class="price-highlight">$790,000</td>
+                            <td>$782</td>
+                            <td class="dom-highlight">~30</td>
+                            <td>SF425090127</td>
+                        </tr>
+                        <tr>
+                            <td class="comp-address">2509 Illinois St<span class="comp-mls">East Palo Alto</span></td>
+                            <td>Feb 17, 2026</td>
+                            <td>3/1</td>
+                            <td>1,030</td>
+                            <td>6,000</td>
+                            <td>1952</td>
+                            <td class="price-highlight">$955,000</td>
+                            <td>$927</td>
+                            <td class="dom-highlight">~25</td>
+                            <td>ML82027699</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Market Context Comps -->
+            <div class="comp-group">
+                <div class="comp-group-title">Market Context (Larger Properties for Reference)</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Sale Date</th>
+                            <th>Beds/Baths</th>
+                            <th>SQFT</th>
+                            <th>Lot</th>
+                            <th>Year</th>
+                            <th>Sale Price</th>
+                            <th>$/Sqft</th>
+                            <th>DOM</th>
+                            <th>MLS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="comp-address">2115 Clarke Ave<span class="comp-mls">East Palo Alto</span></td>
+                            <td>Mar 23, 2026</td>
+                            <td>3/1.1</td>
+                            <td>1,280</td>
+                            <td>5,100</td>
+                            <td>1956</td>
+                            <td class="price-highlight">$1,130,000</td>
+                            <td>$883</td>
+                            <td class="dom-highlight">~18</td>
+                            <td>ML82036030</td>
+                        </tr>
+                        <tr>
+                            <td class="comp-address">2512 Farrington Way<span class="comp-mls">East Palo Alto</span></td>
+                            <td>Feb 27, 2026</td>
+                            <td>3/2</td>
+                            <td>1,100</td>
+                            <td>5,000</td>
+                            <td>1956</td>
+                            <td class="price-highlight">$1,325,000</td>
+                            <td>$1,205</td>
+                            <td class="dom-highlight">~12</td>
+                            <td>ML82033977</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Key Comparison Table -->
+            <div style="margin-top: 3rem;">
+                <div class="comp-group-title" style="margin-bottom: 1rem;">Subject vs. Most Similar Comparables</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Subject (1030 Bradley)</th>
+                            <th>Laurel (Comp 1)</th>
+                            <th>Menalto (Comp 2)</th>
+                            <th>Oakwood (Comp 3)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="detail-label">Beds/Baths</td>
+                            <td>2/1</td>
+                            <td>2/1</td>
+                            <td>2/1</td>
+                            <td>2/1</td>
+                        </tr>
+                        <tr>
+                            <td class="detail-label">Square Feet</td>
+                            <td>810</td>
+                            <td>810 (identical)</td>
+                            <td>1,010 (+200)</td>
+                            <td>990 (+180)</td>
+                        </tr>
+                        <tr>
+                            <td class="detail-label">Lot Size</td>
+                            <td>6,499</td>
+                            <td>6,464 (nearly identical)</td>
+                            <td>6,480 (nearly identical)</td>
+                            <td>6,211 (-288)</td>
+                        </tr>
+                        <tr>
+                            <td class="detail-label">Year Built</td>
+                            <td>1947</td>
+                            <td>1946 (same era)</td>
+                            <td>1936 (older)</td>
+                            <td>1959 (newer)</td>
+                        </tr>
+                        <tr>
+                            <td class="detail-label">Sale Price</td>
+                            <td>–</td>
+                            <td>$805,950</td>
+                            <td>$900,000</td>
+                            <td>$1,035,000</td>
+                        </tr>
+                        <tr>
+                            <td class="detail-label">$/Sqft</td>
+                            <td>–</td>
+                            <td>$995 (as-is)</td>
+                            <td>$891</td>
+                            <td>$1,045 (updated)</td>
+                        </tr>
+                        <tr>
+                            <td class="detail-label">Condition at Sale</td>
+                            <td>Good, minor updates planned</td>
+                            <td>As-is (now being flipped)</td>
+                            <td>Standard</td>
+                            <td>Well-presented</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Price Per Sqft Chart -->
+        <div class="charts-container">
+            <div class="chart-wrapper">
+                <div class="chart-title">Price Per Square Foot Comparison</div>
+                <canvas id="pricePerSqftChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Data & Trends -->
+    <section id="market-trends" class="container">
+        <div class="section-header">
+            <h2>Market Data & Trends</h2>
+            <div class="divider"></div>
+            <p>East Palo Alto Single-Family Market (90-Day Period: Dec 2025 – Mar 2026)</p>
+        </div>
+
+        <div class="market-data-grid">
+            <div class="data-card">
+                <div class="data-value">$1.08M</div>
+                <div class="data-label">Median Sale Price</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">$807</div>
+                <div class="data-label">Avg Price/Sqft</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">18</div>
+                <div class="data-label">Total Sales</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">16</div>
+                <div class="data-label">Median DOM</div>
+            </div>
+        </div>
+
+        <!-- DOM Chart -->
+        <div class="charts-container">
+            <div class="chart-wrapper">
+                <div class="chart-title">Days on Market Distribution</div>
+                <canvas id="domChart"></canvas>
+            </div>
+        </div>
+
+        <!-- List-to-Sale Ratio -->
+        <div class="chart-wrapper">
+            <div class="chart-title">List-to-Sale Price Performance</div>
+            <div class="lts-container">
+                <div class="lts-item">
+                    <div class="lts-label">1024 Laurel Ave (Comp 1)</div>
+                    <div class="lts-bar-container">
+                        <div class="lts-center-line"></div>
+                        <div class="lts-bar-under" style="width: 49.5%;">94.9%</div>
+                        <div class="lts-bar-over" style="width: 50.5%;"></div>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--gray-dark); margin-top: 0.3rem;">Listed ~$849K → Sold $805,950 (Under asking)</div>
+                </div>
+
+                <div class="lts-item">
+                    <div class="lts-label">2352 Menalto Ave (Comp 2)</div>
+                    <div class="lts-bar-container">
+                        <div class="lts-center-line"></div>
+                        <div class="lts-bar-under" style="width: 50%;"></div>
+                        <div class="lts-bar-over" style="width: 50%; background: linear-gradient(90deg, var(--gold), var(--accent-green));">106%</div>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--gray-dark); margin-top: 0.3rem;">Listed ~$849K → Sold $900,000 (Over asking)</div>
+                </div>
+
+                <div class="lts-item">
+                    <div class="lts-label">2055 Oakwood Dr (Comp 3)</div>
+                    <div class="lts-bar-container">
+                        <div class="lts-center-line"></div>
+                        <div class="lts-bar-under" style="width: 50%;"></div>
+                        <div class="lts-bar-over" style="width: 50%; background: linear-gradient(90deg, var(--gold), var(--accent-green));">109.1%</div>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--gray-dark); margin-top: 0.3rem;">Listed ~$949K → Sold $1,035,000 (Strong over asking)</div>
+                </div>
+
+                <div class="lts-item">
+                    <div class="lts-label">2754 Georgetown St (Comp 4)</div>
+                    <div class="lts-bar-container">
+                        <div class="lts-center-line"></div>
+                        <div class="lts-bar-under" style="width: 49.45%;">98.9%</div>
+                        <div class="lts-bar-over" style="width: 50.55%;"></div>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--gray-dark); margin-top: 0.3rem;">Listed ~$799K → Sold $790,000 (Slight under)</div>
+                </div>
+
+                <div class="lts-item">
+                    <div class="lts-label">2509 Illinois St (Comp 5)</div>
+                    <div class="lts-bar-container">
+                        <div class="lts-center-line"></div>
+                        <div class="lts-bar-under" style="width: 50%;"></div>
+                        <div class="lts-bar-over" style="width: 50%; background: linear-gradient(90deg, var(--gold), var(--accent-green));">106.2%</div>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--gray-dark); margin-top: 0.3rem;">Listed $899K → Sold $955,000 (Strategic below-market pricing)</div>
+                </div>
+
+                <div class="lts-item">
+                    <div class="lts-label">2115 Clarke Ave (Comp 6)</div>
+                    <div class="lts-bar-container">
+                        <div class="lts-center-line"></div>
+                        <div class="lts-bar-under" style="width: 50%;"></div>
+                        <div class="lts-bar-over" style="width: 50%; background: linear-gradient(90deg, var(--gold), var(--accent-green));">~109%</div>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--gray-dark); margin-top: 0.3rem;">Listed ~$1,037K → Sold $1,130,000 (Over asking)</div>
+                </div>
+
+                <div class="lts-item">
+                    <div class="lts-label">2512 Farrington Way (Comp 7)</div>
+                    <div class="lts-bar-container">
+                        <div class="lts-center-line"></div>
+                        <div class="lts-bar-under" style="width: 50%;"></div>
+                        <div class="lts-bar-over" style="width: 50%; background: linear-gradient(90deg, var(--gold), var(--accent-green));">~103%</div>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--gray-dark); margin-top: 0.3rem;">Listed ~$1,285K → Sold $1,325,000 (High-end market)</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: var(--light-gold); padding: 1.5rem; border-radius: 4px; margin-top: 2rem; border-left: 4px solid var(--gold);">
+            <strong>Market Insight:</strong> Properties priced strategically below market (Illinois St at $899K, Menalto at ~$849K) generated the strongest overbids (6–9% above asking). Homes listed at or above estimated market value either sold at asking or slightly under. This pattern strongly supports a sub-$900K list price for maximum buyer competition and final price realization.
+        </div>
+    </section>
+
+    <!-- Pricing Strategy -->
+    <section id="strategy" class="container">
+        <div class="section-header">
+            <h2>Pricing Strategy Analysis</h2>
+            <div class="divider"></div>
+            <p>Three Strategic Approaches to Positioning 1030 Bradley Way</p>
+        </div>
+
+        <!-- Expected Sale Price Callout -->
+        <div style="background: var(--black); padding: 2rem; border-radius: 4px; margin-bottom: 2rem; text-align: center; border-top: 4px solid var(--accent-green);">
+            <div style="font-size: 0.9rem; color: var(--light-gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Expected Sale Price (All Strategies)</div>
+            <div style="font-size: 2.5rem; color: var(--accent-green); font-weight: 700;">$900,000 – $950,000</div>
+            <div style="font-size: 0.95rem; color: var(--light-gold); margin-top: 0.5rem;">The market determines the final price — your listing strategy determines how quickly you get there and how many buyers compete for it.</div>
+        </div>
+
+        <div class="strategy-cards">
+            <!-- Strategy 1: Price Below Market -->
+            <div class="strategy-card">
+                <h3>Strategy 1: Price Below Market</h3>
+                <div class="strategy-price">$850K – $875K</div>
+
+                <div class="strategy-row">
+                    <span class="strategy-label">$/Sqft</span>
+                    <span class="strategy-value">$1,049 – $1,080</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Positioning</span>
+                    <span class="strategy-value">Below Laurel flip ($880K)</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Target Buyer Pool</span>
+                    <span class="strategy-value">Active $800K–$900K bracket</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Expected DOM</span>
+                    <span class="strategy-value">7–12 days</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Expected Sale Price</span>
+                    <span class="strategy-value" style="color: var(--accent-green); font-weight: 700;">$900K – $950K</span>
+                </div>
+
+                <div class="strategy-pros">
+                    <strong>Pros:</strong> Generates multiple offers, creates urgency, captures highest-activity buyer segment, proven data support from Illinois and Menalto comps. Most likely to trigger overbids that push to the top of the expected range.
+                </div>
+
+                <div class="strategy-risks">
+                    <strong>Risks:</strong> Perception of underpricing; requires strong offer management to ensure final price reaches expected range
+                </div>
+            </div>
+
+            <!-- Strategy 2: Price at Market (RECOMMENDED) -->
+            <div class="strategy-card" style="border-color: var(--gold); box-shadow: 0 4px 16px rgba(197, 165, 90, 0.3);">
+                <h3 style="color: var(--dark-gold);">Strategy 2: Price at Market ★ RECOMMENDED</h3>
+                <div class="strategy-price">$880K – $940K</div>
+
+                <div class="strategy-row">
+                    <span class="strategy-label">$/Sqft</span>
+                    <span class="strategy-value">$1,086 – $1,160</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Positioning</span>
+                    <span class="strategy-value">Between Laurel flip & Menalto sale</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Target Buyer Pool</span>
+                    <span class="strategy-value">Broadest pool: $850K–$950K bracket</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Expected DOM</span>
+                    <span class="strategy-value">10–20 days</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Expected Sale Price</span>
+                    <span class="strategy-value" style="color: var(--accent-green); font-weight: 700;">$900K – $950K</span>
+                </div>
+
+                <div class="strategy-pros">
+                    <strong>Pros:</strong> Data-defensible, captures condition improvements, broadest buyer pool exposure, balances competitive pricing with credible market positioning
+                </div>
+
+                <div class="strategy-risks">
+                    <strong>Risks:</strong> Slightly less overbid urgency than below-market pricing; requires polished presentation
+                </div>
+            </div>
+
+            <!-- Strategy 3: Price Above Market -->
+            <div class="strategy-card">
+                <h3>Strategy 3: Price Above Market</h3>
+                <div class="strategy-price">~$975K</div>
+
+                <div class="strategy-row">
+                    <span class="strategy-label">$/Sqft</span>
+                    <span class="strategy-value">~$1,204</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Positioning</span>
+                    <span class="strategy-value">Lot value premium play</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Target Buyer Pool</span>
+                    <span class="strategy-value">ADU investors, large-lot seekers</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Expected DOM</span>
+                    <span class="strategy-value">25–40 days</span>
+                </div>
+                <div class="strategy-row">
+                    <span class="strategy-label">Expected Sale Price</span>
+                    <span class="strategy-value" style="color: var(--accent-green); font-weight: 700;">$900K – $950K</span>
+                </div>
+
+                <div class="strategy-pros">
+                    <strong>Pros:</strong> Emphasizes 6,499 sqft lot, ADU potential, appeals to long-term value investors
+                </div>
+
+                <div class="strategy-risks">
+                    <strong>Risks:</strong> Listing above expected market range means likely price reductions or extended DOM; buyers negotiate down rather than bid up; smaller buyer pool at this entry point
+                </div>
+            </div>
+        </div>
+
+        <!-- Strategy Performance Chart -->
+        <div class="charts-container">
+            <div class="chart-wrapper">
+                <div class="chart-title">Subject Positioning Across Comparable Sales</div>
+                <canvas id="positioningChart"></canvas>
+            </div>
+        </div>
+
+        <div style="background: var(--gray-light); padding: 2rem; border-radius: 4px; margin-top: 2rem;">
+            <strong>Strategy Analysis Summary:</strong><br><br>
+            Regardless of which list price strategy is chosen, the expected sale price remains <strong>$900,000 – $950,000</strong> based on comparable sales data and current market conditions. The difference between strategies is <em>how</em> you get there: below-market pricing generates competition and overbids (fast, multiple offers); at-market pricing provides balanced exposure (moderate pace, strong positioning); above-market pricing relies on negotiation downward (slower, fewer buyers). The Illinois St comp proves the pattern: listed at $899K, sold for $955K. The market finds its level—your pricing strategy simply determines the path.
+        </div>
+    </section>
+
+    <!-- Recommended List Price -->
+    <section id="recommendation" class="container">
+        <div class="section-header">
+            <h2>Recommended List Price</h2>
+            <div class="divider"></div>
+        </div>
+
+        <!-- Key Numbers at a Glance -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+            <div style="background: var(--black); padding: 2.5rem; border-radius: 4px; text-align: center; border-top: 4px solid var(--gold);">
+                <div style="font-size: 0.9rem; color: var(--light-gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Recommended List Price</div>
+                <div style="font-size: 2.8rem; color: var(--gold); font-weight: 700;">$880K – $940K</div>
+            </div>
+            <div style="background: var(--black); padding: 2.5rem; border-radius: 4px; text-align: center; border-top: 4px solid var(--accent-green);">
+                <div style="font-size: 0.9rem; color: var(--light-gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Expected Sale Price</div>
+                <div style="font-size: 2.8rem; color: var(--accent-green); font-weight: 700;">$900K – $950K</div>
+            </div>
+        </div>
+
+        <div class="price-ranges">
+            <div class="price-range">
+                <h3>Below Market</h3>
+                <div class="price-range-value">$850K – $875K</div>
+                <div class="price-range-detail">
+                    Maximum urgency, strongest overbid potential, fastest sale<br>
+                    <span style="color: var(--accent-green); font-weight: 600;">Expected Sale: $900K – $950K</span>
+                </div>
+            </div>
+            <div class="price-range" style="border-top-color: var(--dark-gold);">
+                <h3>★ At Market (Recommended)</h3>
+                <div class="price-range-value">$880K – $940K</div>
+                <div class="price-range-detail">
+                    Broadest buyer pool, data-supported, balanced positioning<br>
+                    <span style="color: var(--accent-green); font-weight: 600;">Expected Sale: $900K – $950K</span>
+                </div>
+            </div>
+            <div class="price-range">
+                <h3>Above Market</h3>
+                <div class="price-range-value">~$975K</div>
+                <div class="price-range-detail">
+                    Lot premium play, longer DOM, negotiate-down path<br>
+                    <span style="color: var(--accent-green); font-weight: 600;">Expected Sale: $900K – $950K</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="recommendation">
+            <h3>Our Recommendation: List at $880,000 – $940,000</h3>
+            <p style="background: var(--black); color: var(--accent-green); padding: 1.5rem; border-radius: 4px; text-align: center; font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem;">Expected Sale Price: $900,000 – $950,000</p>
+            <p><strong>Rationale:</strong></p>
+            <p>The 1024 Laurel comparable—identical to 1030 Bradley in every measurable way (2/1, 810 sqft, similar lot)—sold as-is for $805,950 on January 2. That same property is now being re-listed at $880,000, signaling the market's assessment of value after minor updates. We are confident that 1030 Bradley, in good condition with completed or imminent minor updates, should command equal to or above the Laurel flip asking price of $880K.</p>
+            <p>Pricing in the $880K–$940K range achieves multiple objectives:</p>
+            <p><strong>1. Captures the broadest buyer pool.</strong> EPA buyers are actively searching in the $850K–$950K bracket. This range pulls in both entry-level buyers and move-up buyers, maximizing competition for your property.</p>
+            <p><strong>2. Historical data support for overbids.</strong> The Illinois St comparable proved this strategy: listed at $899K, sold for $955K (6.2% over). Menalto, listed around $849K, sold for $900K. Oakwood and Graeham's recent Clarke listing also sold well over asking. Strategic pricing within this range consistently triggers competition that pushes the final sale price above asking.</p>
+            <p><strong>3. Positions for multiple offers.</strong> With 16 median DOM and 18 sales in 90 days, EPA is a competitive market. A list price in the $880K–$940K range with strong presentation will attract 2–4 qualified offers within the first 10–20 days, creating a negotiation environment favoring the seller.</p>
+            <p><strong>4. Leverages Graeham's recent track record.</strong> Oakwood (2/1, 990 sqft) sold for $1,035K; Clarke (3/1.1, 1,280 sqft) sold for $1,130K. Graeham knows how to stage and price EPA SFRs for maximum buyer competition. The market recognizes this.</p>
+            <p><strong>5. Expected sale price of $900K–$950K.</strong> Tenants are leaving, minor updates will be completed, the lot offers ADU potential, and transit access is excellent. These are legitimate value-adds that, combined with strategic pricing, position this property for a final sale price of <strong>$900,000 – $950,000</strong>. This is consistent with recent EPA sale patterns and supported by the comparable data.</p>
+            <p><strong>Bottom line:</strong> List at $880,000 – $940,000. Expected sale price: $900,000 – $950,000. The market determines the final price regardless of listing strategy—but listing in this recommended range gives you the optimal balance of buyer exposure, competitive tension, and market credibility to reach the top of that expected range.</p>
+        </div>
+    </section>
+
+    <!-- Special Considerations -->
+    <section id="special" class="container">
+        <div class="section-header">
+            <h2>Special Considerations</th>
+                            <th>DOM</th>
+              Important Factors for Listing & Marketing</p>
+        </div>
+
+        <div class="consideration-boxes">
+            <div class="consideration-box">
+                <h4><span class="flag-icon">⚠</span>County Records vs. Actual Layout</h4>
+                <p>County assessor records indicate 4 bedrooms; however, the actual functional layout is 2 bedrooms / 1 bathroom. This discrepancy should be explicitly addressed in the listing description and during showings. It represents either historical misclassification or a layout change that was not updated in county records. Opportunity: Frame the flexible space (den, office, bonus room) as a feature for remote workers or small businesses. Disclose clearly to avoid appraisal complications or buyer disputes post-offer.</p>
+            </div>
+
+            <div class="consideration-box">
+                <h4>Tenant Transition Timing</h4>
+                <p>Current tenants are moving out. Coordinate listing launch to coincide with or immediately follow tenant departure. This enables professional staging, photography under ideal conditions, and buyer access for showings without tenant coordination. Consider a 2-week staging and marketing prep window after tenant move-out.</p>
+            </div>
+
+            <div class="consideration-box">
+                <h4>Minor Updates Impact & Timeline</h4>
+                <p>Minor cosmetic updates (paint, landscaping, basic repairs, staging) will significantly enhance buyer perception and price realization. The Laurel comp's jump from $806K (as-is) to $880K (after updates) demonstrates the value. Ensure updates are completed before or immediately at listing launch. Photos should showcase the updated condition; do not list the property pre-update.</p>
+            </div>
+
+            <div class="consideration-box">
+                <h4>ADU Potential & Lot Value</h4>
+                <p>The 6,499 sqft lot (0.15 acre) is larger than most EPA comparables and legally eligible for ADU development under current CA zoning. This is a material value differentiator, especially for investor buyers. Include zoning information in the MLS remarks and marketing materials. Consider a brief addendum highlighting ADU development potential (cost estimates, timeline, rental projections) for investor interest.</p>
+            </div>
+
+            <div class="consideration-box">
+                <h4>Lot-to-Home Value Ratio</h4>
+                <p>The lot represents a disproportionate share of total value. At 6,499 sqft with a potential ~$5M/lot implied value (based on recent lot sales in EPA), the buildable land is worth more per sf than the 1947-built home. This is a long-term value play and appeals to investors planning renovations or future development. Position this in marketing narrative.</p>
+            </div>
+
+            <div class="consideration-box">
+                <h4>Tech Campus Proximity & Commute Appeal</h4>
+                <p>Meta and Google campuses are 2–4 miles away (5–10 minute commute). East Palo Alto is becoming an attractive option for tech employees seeking shorter commutes, walkable neighborhoods, and home equity. This demographic is active in the $800K–$1M price range and values location and future appreciation. Emphasize commute advantage and emerging neighborhood momentum.</p>
+            </div>
+
+            <div class="consideration-box">
+                <h4>No Unpermitted Work</h4>
+                <p>The property has no unpermitted work, which simplifies appraisals, inspections, and financing. This is a competitive advantage—explicitly highlight in marketing and offer documentation. It reduces buyer friction during due diligence.</p>
+            </div>
+
+            <div class="consideration-box">
+                <h4>Single-Family Buyer Demographics</h4>
+                <p>2-bed / 1-bath properties in EPA appeal to: first-time homebuyers with modest down payments; small families or couples seeking entry-level SFRs; investors targeting rental or fix-flip; young professionals from tech companies. Market to all three segments with distinct messaging (first-time buyer programs, family potential, investment metrics).</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <h2>Let's Move Forward</th>
+
+        <div class="contact-grid">
+            <div class="contact-item">
+                <div class="contact-label">Phone</div>
+                <div class="contact-value"><a href="tel:6503084727">(650) 308-4727</aDOM</th>
+            /div>
+            <div class="contact-item">
+                <div class="contact-label">Email</div>
+                <div class="contact-value"><a href="mailto:graehamwatts@gmail.com">graehamwatts@gmail.com</aDOM</th>
+            /div>
+            <div class="contact-item">
+                <div class="contact-label">Website</div>
+                <div class="contact-value"><a href="https://www.graehamwatts.com" target="_blank">www.graehamwatts.com</aDOM</th>
+            /div>
+        </div>
+
+        <div class="brokerage-info">
+            <div><strong>GRAEHAM WATTS</strong></div>
+            <div>REALTOR</div>
+            <div style="margin-top: 0.5rem;">Intero Real Estate Services</div>
+            <div>DRE License #01466876</div>
+            <div style="margin-top: 1rem; font-style: italic;">This Comparative Market Analysis is prepared for listing presentation purposes. It reflects recent market data, comparable sales, and strategic pricing analysis. All data sourced from MLS records current as of March 30, 2026.</div>
+        </div>
+    </section>
+
+    <script>
+        // CMA Navigation active link handler
+        document.querySelectorAll('.cma-nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = this.getAttribute('href');
+                document.querySelectorAll('.cma-nav a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Update CMA nav on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.cma-nav a');
+            let currentSection = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 130) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Chart.js configuration
+        Chart.register(ChartDataLabels);
+
+        // Price Per Sqft Chart
+        const pricePerSqftCtx = document.getElementById('pricePerSqftChart').getContext('2d');
+        new Chart(pricePerSqftCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Laurel\n(As-is)', 'Menalto', 'Oakwood\n(Updated)', 'Georgetown', 'Illinois', 'Clarke', 'Farrington'],
+                datasets: [{
+                    label: '$/Sqft',
+                    data: [995, 891, 1045, 782, 927, 883, 1205],
+                    backgroundColor: [
+                        '#C5A55A',
+                        '#C5A55A',
+                        '#C5A55A',
+                        '#A88B3D',
+                        '#A88B3D',
+                        '#A88B3D',
+                        '#4A90E2'
+                    ],
+                    borderColor: '#1A1A1A',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'x',
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    datalabels: {
+                        color: '#1A1A1A',
+                        font: {
+                            weight: 'bold',
+                            size: 11
+                        },
+                        anchor: 'end',
+                        align: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 1300,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value;
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // DOM Chart
+        const domCtx = document.getElementById('domChart').getContext('2d');
+        new Chart(domCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Laurel', 'Menalto', 'Oakwood', 'Georgetown', 'Illinois', 'Clarke', 'Farrington'],
+                datasets: [{
+                    label: 'Days on Market',
+                    data: [45, 20, 15, 30, 25, 18, 12],
+                    backgroundColor: '#C5A55A',
+                    borderColor: '#1A1A1A',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'x',
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    datalabels: {
+                        color: '#1A1A1A',
+                        font: {
+                            weight: 'bold',
+                            size: 11
+                        },
+                        anchor: 'end',
+                        align: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 50,
+                        ticks: {
+                            callback: function(value) {
+                                return value + ' days';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Positioning Chart - Scatter/Bubble showing comparables and subject positioning
+        const positioningCtx = document.getElementById('positioningChart').getContext('2d');
+        new Chart(positioningCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'Most Similar (Direct Comps)',
+                        data: [
+                            { x: 810, y: 805950, comp: 'Laurel' },
+                            { x: 1010, y: 900000, comp: 'Menalto' },
+                            { x: 990, y: 1035000, comp: 'Oakwood' }
+                        ],
+                        backgroundColor: '#C5A55A',
+                        borderColor: '#1A1A1A',
+                        borderWidth: 2,
+                        pointRadius: 8,
+                        pointHoverRadius: 10
+                    },
+                    {
+                        label: 'Secondary Comps',
+                        data: [
+                            { x: 1010, y: 790000, comp: 'Georgetown' },
+                            { x: 1030, y: 955000, comp: 'Illinois' }
+                        ],
+                        backgroundColor: '#A88B3D',
+                        borderColor: '#1A1A1A',
+                        borderWidth: 2,
+                        pointRadius: 7,
+                        pointHoverRadius: 9
+                    },
+                    {
+                        label: 'Market Context',
+                        data: [
+                            { x: 1280, y: 1130000, comp: 'Clarke' },
+                            { x: 1100, y: 1325000, comp: 'Farrington' }
+                        ],
+                        backgroundColor: '#4A90E2',
+                        borderColor: '#1A1A1A',
+                        borderWidth: 2,
+                        pointRadius: 7,
+                        pointHoverRadius: 9
+                    },
+                    {
+                        label: 'SUBJECT - Recommended Range',
+                        data: [
+                            { x: 810, y: 880000 },
+                            { x: 810, y: 940000 }
+                        ],
+                        backgroundColor: '#FF9500',
+                        borderColor: '#1A1A1A',
+                        borderWidth: 3,
+                        pointRadius: 10,
+                        pointHoverRadius: 12,
+                        showLine: true,
+                        borderDash: [5, 5]
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            usePointStyle: true,
+                            font: { size: 12 }
+                        }
+                    },
+                    datalabels: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                if (context.raw.comp) {
+                                    return context.raw.comp + ': ' + context.raw.x + ' sqft, $' + context.raw.y.toLocaleString();
+                                }
+                                return context.raw.x + ' sqft, $' + context.raw.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Square Footage',
+                            font: { size: 12, weight: 'bold' }
+                        },
+                        min: 750,
+                        max: 1350,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Sale Price',
+                            font: { size: 12, weight: 'bold' }
+                        },
+                        min: 700000,
+                        max: 1400000,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + (value / 1000000).toFixed(1) + 'M';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Animate stat boxes on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        });
+
+        document.querySelectorAll('.stat-box, .data-card, .strategy-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>
